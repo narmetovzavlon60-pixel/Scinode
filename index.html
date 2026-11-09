@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Scinode</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:var(--tg-theme-bg-color,#faf8ff);--tx:var(--tg-theme-text-color,#1b1b1f);--hint:var(--tg-theme-hint-color,#6f6f78);--pr:var(--tg-theme-button-color,#5b5896);--prt:var(--tg-theme-button-text-color,#fff);--sec:var(--tg-theme-secondary-bg-color,#e6e1e9);--ct:color-mix(in srgb,var(--pr) 16%,var(--bg));--ln:color-mix(in srgb,var(--tx) 22%,transparent)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}body{background:var(--bg);color:var(--tx);font:15px/1.4 Roboto,system-ui,sans-serif;overscroll-behavior:none}
+#app{display:flex;flex-direction:column;height:100%}main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:90px}
+.hidden{display:none!important}.p{padding:12px 16px}
+h1{font-size:26px;font-weight:700}h2{font-size:16px;margin:14px 0 6px}.h{color:var(--hint);font-size:13px}
+input,select,textarea{width:100%;font:inherit;color:var(--tx);background:var(--sec);border:1px solid transparent;border-radius:14px;padding:13px 14px;outline:0}
+textarea{min-height:150px;resize:vertical}input:focus,textarea:focus{border-color:var(--pr)}
+button{font:inherit;border:0;cursor:pointer;color:var(--prt);background:var(--pr);border-radius:20px;padding:11px 18px;font-weight:500}
+button:active{opacity:.7}button.gh{background:none;color:var(--pr);border:1px solid var(--ln)}button.ln{background:none;color:var(--pr);padding:6px 4px}
+.row{display:flex;gap:8px;align-items:center}.sp{justify-content:space-between}
+.hero{background:linear-gradient(135deg,var(--pr),color-mix(in srgb,var(--pr) 50%,#a0485f));color:#fff;padding:18px 20px 30px;border-radius:0 0 32px 32px}
+.hero h1{margin-top:28px}.hero p{opacity:.8;margin-top:4px}.brand{font-size:22px}
+.box{background:var(--ct);border-radius:20px;padding:16px;margin:12px 16px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 16px}
+.tile{background:var(--sec);border-radius:26px;height:130px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;font-weight:700;font-size:16px}
+.ic{width:46px;height:46px;border-radius:16px;background:color-mix(in srgb,var(--pr) 15%,transparent);display:grid;place-items:center;font-size:21px}
+.wide{display:flex;gap:14px;align-items:center;background:var(--ct);border-radius:28px;padding:16px;margin:10px 16px}
+.wide b{color:var(--pr);font-size:17px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none}
+.chip{flex:none;border:1px solid var(--ln);border-radius:12px;padding:7px 14px;background:none;color:var(--tx);font-weight:400}
+.chip.on{background:var(--ct);border-color:transparent;font-weight:500}
+.sb{display:flex;align-items:center;gap:10px;background:var(--sec);border-radius:28px;padding:0 8px 0 18px;margin:12px 16px}
+.sb input{background:none;padding:15px 0}.sb button{padding:8px 12px;background:none;color:var(--tx);font-size:20px}
+.seg{display:flex;margin:10px 16px;border:1px solid var(--ln);border-radius:20px;overflow:hidden}
+.seg button{flex:1;border-radius:0;background:none;color:var(--tx);border-right:1px solid var(--ln);padding:11px 4px}.seg button:last-child{border:0}.seg button.on{background:var(--ct)}
+.tabs{display:flex;border-bottom:1px solid var(--ln);overflow-x:auto}.tabs button{background:none;color:var(--hint);border-radius:0;padding:14px 16px;white-space:nowrap}.tabs button.on{color:var(--pr);border-bottom:3px solid var(--pr)}
+.card{background:var(--sec);border-radius:20px;padding:14px;margin:10px 16px;content-visibility:auto;contain-intrinsic-size:auto 150px}
+.card .t{font-weight:700;line-height:1.3}.card .m{color:var(--hint);font-size:13px;margin-top:3px}
+.ab{font-size:13.5px;margin-top:6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.ab.o{display:block}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:10px;background:var(--ct);color:var(--pr);margin:6px 6px 0 0}
+.tag.r{background:#ffdad6;color:#8c1d18}.tag.g{background:#c8efd4;color:#0d5c2a}
+.warn{background:#ffd9e2;color:#3e001d;border-radius:16px;padding:12px 14px;margin:10px 16px;font-size:14px}
+.empty{text-align:center;color:var(--hint);padding:40px 24px}.empty .ic{margin:0 auto 14px;width:84px;height:84px;border-radius:50%;font-size:36px}
+.av{width:52px;height:52px;border-radius:50%;background:color-mix(in srgb,var(--pr) 25%,transparent);color:var(--pr);display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.big{width:96px;height:96px;font-size:44px;background:#2d6a1e;color:#fff;margin:24px auto 10px}
+.item{background:var(--sec);border-radius:20px;padding:16px;margin:10px 16px;display:flex;align-items:center;gap:14px}.item>div{flex:1}
+.sw{appearance:none;width:52px!important;height:30px;border-radius:15px;border:2px solid var(--hint);background:none;position:relative;flex:none;padding:0}
+.sw:before{content:"";position:absolute;top:4px;left:5px;width:16px;height:16px;border-radius:50%;background:var(--hint);transition:.15s}
+.sw:checked{background:var(--pr);border-color:var(--pr)}.sw:checked:before{left:25px;width:20px;height:20px;top:2px;background:#fff}
+nav{display:flex;background:var(--sec);padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+nav button{flex:1;background:none;color:var(--tx);font-size:12px;padding:0;font-weight:500}nav i{display:block;font-style:normal;font-size:20px;width:58px;margin:0 auto 2px;border-radius:16px;padding:3px 0}nav .on i{background:var(--ct)}
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:20}.sheet{background:var(--bg);width:100%;border-radius:28px 28px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}.lb{display:block;font-size:13px;color:var(--hint);margin:10px 0 4px}
+.task{display:flex;gap:10px;align-items:center;background:var(--sec);border-radius:16px;padding:10px 12px;margin:8px 16px}.task>div{flex:1;word-break:break-word}.task.d .tt{text-decoration:line-through;color:var(--hint)}
+.x{background:none;color:var(--hint);padding:4px 8px;font-size:20px}.st{padding:6px 12px;font-size:12px;background:var(--bg);color:var(--tx)}
+#fb{position:fixed;left:16px;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:5;box-shadow:0 4px 14px #0004}
+#lock{position:fixed;inset:0;background:var(--bg);z-index:30;display:flex;flex-direction:column;justify-content:center;padding:40px;text-align:center;gap:14px}
+.pv{background:var(--sec);border-radius:16px;padding:12px;margin-top:10px;min-height:48px;overflow-x:auto}
+.spin{text-align:center;color:var(--hint);padding:24px}
+</style></head><body>
+<div id="app"><main id="main"></main>
+<nav id="nav"></nav></div><button id="fb" class="hidden"></button>
+<script>
+(()=>{"use strict";
+const OA_KEY='';/* вставьте сюда свой ключ OpenAlex, чтобы пользователям не нужно было вводить свой */
+
+const tg=window.Telegram&&Telegram.WebApp,inTG=!!(tg&&tg.initData);
+if(tg){tg.ready();tg.expand();try{tg.setHeaderColor('bg_color');tg.setBackgroundColor('bg_color')}catch(e){}}
+const $=s=>document.querySelector(s),enc=encodeURIComponent;
+const st={get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rich=s=>esc(s).replace(/&lt;(\/?)(sub|sup|i|b)&gt;/gi,'<$1$2>');
+const hap=t=>{try{tg.HapticFeedback.notificationOccurred(t||'success')}catch(e){}};
+const alertM=m=>inTG&&tg.showAlert?tg.showAlert(m):alert(m);
+const openU=u=>tg&&tg.openLink?tg.openLink(u):window.open(u,'_blank','noopener');
+const fmt=n=>(n||0).toLocaleString('ru-RU');
+const ymd=d=>d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+let S=st.get('S',{goal:5,lang:'ru'}),LIB=st.get('lib',[]),PR=st.get('proj',[]),NT=st.get('notes',[]);
+const tu=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user;
+if(!S.name&&tu)S.name=tu.first_name||'';
+const save=()=>{st.set('S',S);st.set('lib',LIB);st.set('proj',PR);st.set('notes',NT)};
+
+const T={ru:{home:'Главная',search:'Поиск',lib:'Библиотека',net:'Сеть',prof:'Профиль',hello:'Привет',what:'Что хотите сделать сегодня?',f1:'Найти статьи',f2:'Библиотека',f3:'Найти учёных',f4:'Гранты',pj:'Мои проекты',pjd:'Доски задач для статей, грантов и диссертации',nt:'Заметки и формулы',ntd:'Записи к статьям и задачам с формулами LaTeX'},
+uz:{home:'Bosh sahifa',search:'Qidiruv',lib:'Kutubxona',net:'Tarmoq',prof:'Profil',hello:'Salom',what:'Bugun nima qilmoqchisiz?',f1:'Maqolalar',f2:'Kutubxona',f3:'Olimlarni topish',f4:'Grantlar',pj:'Loyihalarim',pjd:'Maqola, grant va dissertatsiya vazifalari',nt:'Eslatma va formulalar',ntd:'LaTeX formulali yozuvlar'},
+en:{home:'Home',search:'Search',lib:'Library',net:'Network',prof:'Profile',hello:'Hi',what:'What would you like to do today?',f1:'Find papers',f2:'Library',f3:'Find scientists',f4:'Grants',pj:'My projects',pjd:'Task boards for papers, grants and thesis',nt:'Notes & formulas',ntd:'Notes with LaTeX formulas'}};
+const t=k=>(T[S.lang]||T.ru)[k]||T.ru[k];
+
+/* ---- API ---- */
+async function api(p){let u='https://api.openalex.org/'+p;const K=S.oaKey||OA_KEY;if(K)u+=(p.includes('?')?'&':'?')+'api_key='+enc(K);
+ const c=new AbortController(),to=setTimeout(()=>c.abort(),15000);try{const r=await fetch(u,{signal:c.signal});if(!r.ok){const e=new Error('HTTP '+r.status);e.st=r.status;throw e}return await r.json()}finally{clearTimeout(to)}}
+function askKey(msg){modal('Ключ OpenAlex',[{id:'k',l:msg||'OpenAlex требует бесплатный API-ключ: openalex.org/settings/api',t:'password'}],o=>{if(o.k){S.oaKey=o.k;save();alertM('Ключ сохранён. Повторите поиск.');show(cur)}})}
+function keyErr(e){if(!(S.oaKey||OA_KEY)||[401,403,409,429].includes(e.st)){askKey(S.oaKey?'Ключ не принят или исчерпан лимит. Вставьте рабочий ключ с openalex.org/settings/api':null);return 1}return 0}
+const abs=i=>{if(!i)return'';const o=[];for(const k in i)i[k].forEach(p=>o[p]=k);return o.join(' ')};
+const wk=it=>{const au=(it.authorships||[]).map(a=>a.author&&a.author.display_name).filter(Boolean),l=it.primary_location||{};
+ return{id:it.id,title:it.display_name||'',au:au.slice(0,4).join(', ')+(au.length>4?' и др.':''),year:it.publication_year,src:(l.source&&l.source.display_name)||'',url:it.doi||(it.open_access&&it.open_access.oa_url)||it.id,ab:abs(it.abstract_inverted_index),cites:it.cited_by_count,oa:!!(it.open_access&&it.open_access.is_oa)}};
+
+/* ---- main button ---- */
+let mainFn=null;
+function setMain(txt,fn){mainFn=fn;if(inTG){const m=tg.MainButton;if(!txt)m.hide();else m.setParams({text:txt,is_visible:true,color:tg.themeParams.button_color,text_color:tg.themeParams.button_text_color})}else{const b=$('#fb');if(!txt)b.classList.add('hidden');else{b.textContent=txt;b.classList.remove('hidden')}}}
+if(inTG)tg.MainButton.onClick(()=>mainFn&&mainFn());$('#fb').onclick=()=>mainFn&&mainFn();
+if(inTG)tg.BackButton.onClick(()=>show('home'));
+
+/* ---- modal ---- */
+function modal(title,fields,cb){const m=document.createElement('div');m.className='mod';
+ m.innerHTML='<div class="sheet"><h2>'+title+'</h2>'+fields.map(f=>'<label class="lb">'+f.l+'</label><input id="m_'+f.id+'" type="'+(f.t||'text')+'" value="'+esc(f.v||'')+'">').join('')+'<div class="row" style="margin-top:16px"><button class="gh" data-m="x">Отмена</button><button data-m="ok" style="flex:1">Сохранить</button></div></div>';
+ m.onclick=e=>{const b=e.target.closest('[data-m]');if(e.target===m||(b&&b.dataset.m==='x'))m.remove();else if(b){const o={};fields.forEach(f=>o[f.id]=$('#m_'+f.id).value.trim());m.remove();cb(o)}};document.body.appendChild(m)}
+
+/* ---- tasks helpers ---- */
+const allT=()=>PR.flatMap(p=>p.tasks.map(x=>Object.assign({p:p.name},x)));
+const weekStart=()=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getTime()};
+const streak=()=>{const days=new Set(allT().filter(x=>x.doneAt).map(x=>ymd(new Date(x.doneAt))));let n=0,d=new Date();if(!days.has(ymd(d)))d.setDate(d.getDate()-1);while(days.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n};
+const SL={todo:'К работе',doing:'В процессе',done:'Готово'},NX={todo:'doing',doing:'done',done:'todo'};
+const pl=n=>n%10==1&&n%100!=11?'день':([2,3,4].includes(n%10)&&!(n%100>=12&&n%100<=14))?'дня':'дней';
+
+/* ---- state ---- */
+let cur='home',Q={q:'',oa:false,sort:'relevance_score:desc',items:[],page:1,total:0,busy:0,err:0};
+let N={mode:'topic',sf:null,kw:'',cc:'UZ',act:true,res:null,name:'',busy:0},SF={};
+let G={er:{},tab:'open',kw:'',eu:true,gg:true,items:null,cnt:{eu:0,gg:0},n:20,busy:0};
+let curP=null,pf='all',curN=null,LK=0;
+const CC={UZ:'Узбекистан',KZ:'Казахстан',KG:'Кыргызстан',TJ:'Таджикистан',TM:'Туркменистан',RU:'Россия',TR:'Турция',US:'США',GB:'Великобритания',DE:'Германия',CN:'Китай',IN:'Индия','':'Любая страна'};
+
+/* ---- views ---- */
+const wcard=(w,lib)=>`<div class="card" data-id="${esc(w.id)}"><div class="t">${rich(w.title)}</div><div class="m">${esc(w.au)}${w.src?' · '+esc(w.src):''}${w.year?' · '+w.year:''}</div>${w.ab?`<div class="ab">${rich(w.ab)}</div>`:''}<div>${w.cites!=null?`<span class="tag">Цитирований: ${fmt(w.cites)}</span>`:''}${w.oa?'<span class="tag g">Open Access</span>':''}</div><div class="row">${w.ab?'<button class="ln" data-a="ex">Развернуть</button>':''}<button class="ln" data-a="op" data-u="${esc(w.url)}">Открыть</button><button class="ln" data-a="${lib?'unsave':'save'}">${lib?'Удалить':(LIB.some(x=>x.id===w.id)?'В библиотеке ✓':'Сохранить')}</button></div></div>`;
+const V={
+consent:()=>`<div class="p"><h1>Scinode</h1><p class="h">Научный помощник: статьи, учёные, гранты, библиотека и заметки.</p><div class="box" style="margin:14px 0;font-size:13.5px"><b>Обработка данных</b><br>Приложение действует в соответствии с Законом РУз «О персональных данных» (ЗРУ-547). Профиль, задачи, заметки, библиотека и токены хранятся только в localStorage вашего устройства. Поисковые запросы уходят в OpenAlex, Grants.gov, EU Funding &amp; Tenders и Zotero по вашему действию. Всё можно удалить в профиле.</div><label class="lb">Ключ OpenAlex (бесплатный, openalex.org/settings/api) — нужен для поиска</label><input id="ok" type="password" placeholder="API-ключ OpenAlex" value="${esc(S.oaKey)}" style="margin-bottom:14px"><label class="row" style="align-items:flex-start"><input type="checkbox" id="ag" class="sw" style="width:52px"><span>Согласен на обработку данных</span></label><button id="cb" class="hidden" data-a="accept" style="width:100%;margin-top:16px">Принять и продолжить</button></div>`,
+home(){const tk=allT(),td=ymd(new Date()),due=tk.filter(x=>x.s!=='done'&&x.due&&x.due<=td),done=tk.filter(x=>x.doneAt>=weekStart()).length,g=S.goal||5,sk=streak(),C=2*Math.PI*30;
+ return `<div class="hero"><div class="row"><svg width="34" height="34" viewBox="0 0 34 34"><g stroke="#fff" stroke-width="1.5"><path d="M7 7L17 17L27 7M7 27L17 17L27 27"/></g><circle cx="17" cy="17" r="5" fill="#fff"/><circle cx="7" cy="7" r="3" fill="#4dd"/><circle cx="27" cy="7" r="3" fill="#a88bfa"/><circle cx="7" cy="27" r="3" fill="#fbbf24"/><circle cx="27" cy="27" r="3" fill="#34d399"/></svg><b class="brand">Scinode</b></div><h1>${t('hello')}, ${esc(S.name||'')}</h1><p>${t('what')}</p></div>
+<div class="box" style="margin-top:16px"><div class="row sp" data-a="go" data-v="proj"><div class="row"><span style="font-size:26px">✔️</span><div><b style="font-size:17px">Мои задачи</b><div>${due.length?due.length+' на сегодня: '+esc(due[0].t):'На сегодня задач нет'}</div></div></div><span>›</span></div>
+<div class="row sp" style="margin-top:14px"><div class="row"><svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" fill="none" stroke="var(--ln)" stroke-width="7"/><circle cx="36" cy="36" r="30" fill="none" stroke="var(--pr)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${C*Math.min(1,done/g)} ${C}" transform="rotate(-90 36 36)"/><text x="36" y="42" text-anchor="middle" font-weight="700" fill="currentColor" font-size="18">${sk}</text></svg><div><b>${sk?'Серия: '+sk+' '+pl(sk):'Сдвиньте задачу сегодня, чтобы начать серию'}</b><div>Цель недели: ${done} из ${g}</div></div></div><button class="ln" data-a="goal">✏️</button></div></div>
+<div class="tiles">${[['📄','f1','search'],['📚','f2','lib'],['👥','f3','net'],['💰','f4','grants']].map(x=>`<div class="tile" data-a="go" data-v="${x[2]}"><div class="ic">${x[0]}</div>${t(x[1])}</div>`).join('')}</div>
+<div class="wide" data-a="go" data-v="proj"><div class="ic">📋</div><div style="flex:1"><b>${t('pj')}</b><div class="h">${t('pjd')}</div></div>›</div>
+<div class="wide" data-a="go" data-v="notes"><div class="ic">∑</div><div style="flex:1"><b>${t('nt')}</b><div class="h">${t('ntd')}</div></div>›</div>`},
+search:()=>`${S.oaKey||OA_KEY?'':'<div class="warn">Для поиска нужен бесплатный ключ OpenAlex. <button class="ln" data-a="key2">Ввести ключ</button></div>'}<div class="sb"><input id="q" type="search" placeholder="Тема, название, автор…" value="${esc(Q.q)}" enterkeyhint="search"><button data-a="dosearch">→</button></div>
+<div class="chips"><button class="chip ${Q.oa?'on':''}" data-a="oa">Открытый доступ</button>${[['relevance_score:desc','Релевантность'],['cited_by_count:desc','Цитирования'],['publication_date:desc','Новые']].map(x=>`<button class="chip ${Q.sort===x[0]?'on':''}" data-a="sort" data-s="${x[0]}">${x[1]}</button>`).join('')}</div><div id="res">${resHtml()}</div>`,
+lib:()=>`<div class="p row sp"><h1>Библиотека</h1><button class="gh" data-a="zot" style="color:#b5481c">⇄ Zotero</button></div>${LIB.length?`<div class="p h" style="padding-top:0">Сохранено: ${LIB.length}</div>`+LIB.map(w=>wcard(w,1)).join(''):`<div class="empty"><div class="ic">📚</div><h2 style="color:var(--tx)">Библиотека пуста</h2>Сохраняйте статьи из поиска, и они появятся здесь.<br><br><button class="gh" data-a="zot" style="color:#b5481c">⇄ Импорт из Zotero</button></div>`}`,
+net(){const m=N.mode;let f='';
+ if(m==='topic')f=`<div class="p h">Найдите ведущих исследователей по направлению, ключевым словам и стране. Рейтинг строится по числу работ в открытой базе OpenAlex.</div>${N.sf?`<div class="item row" style="margin:8px 16px;background:none;border:1px solid var(--ln);color:var(--pr)"><div>🔷 ${esc(N.sf.name)}</div><button class="x" data-a="clrsf">✕</button></div>`:`<div style="padding:0 16px"><input id="sf" list="sfl" placeholder="Тема (на английском, напр. Aerospace)"><datalist id="sfl">${Object.keys(SF).map(k=>`<option value="${esc(k)}">`).join('')}</datalist></div>`}<div style="padding:10px 16px"><input id="kw" placeholder="Ключевые слова (необязательно)" value="${esc(N.kw)}"></div><div style="padding:0 16px"><select id="cc">${Object.keys(CC).map(k=>`<option value="${k}" ${k===N.cc?'selected':''}>${CC[k]}</option>`).join('')}</select></div><div class="row sp" style="padding:12px 16px"><span>Только активные за последние 5 лет</span><input type="checkbox" class="sw" id="act" ${N.act?'checked':''}></div>${inTG?'':'<div style="padding:0 16px"><button data-a="netgo" style="width:100%">🔍 Найти</button></div>'}`;
+ else if(m==='name')f=`<div class="sb"><input id="nm" placeholder="Имя учёного" value="${esc(N.name)}"><button data-a="netgo">→</button></div>`;
+ else f=`<div class="p h">Профили участников Scinode.</div><div class="item"><div class="av">${esc((S.name||'?')[0])}</div><div><b>${esc(S.name||'Вы')}</b><div class="h">${esc(S.aff||'Ваш профиль учёного')}</div></div></div><div class="empty">Другие участники появятся при подключении сервера сообщества.</div>`;
+ return `<div class="p row sp"><h1>Сеть учёных</h1></div><div class="seg">${[['topic','По теме'],['name','По имени'],['sci','В Scinode']].map(x=>`<button class="${m===x[0]?'on':''}" data-a="nmode" data-m="${x[0]}">${x[1]}</button>`).join('')}</div>${f}<div id="nres">${netHtml()}</div>`},
+grants:()=>`<div class="row" style="padding:12px 16px"><button class="x" data-a="go" data-v="home" style="font-size:24px;color:var(--tx)">←</button><h2 style="margin:0 0 0 16px;font-size:22px;font-weight:400">Гранты</h2></div><div class="tabs"><button class="${G.tab==='open'?'on':''}" data-a="gtab" data-m="open">Открытые конкурсы</button><button class="${G.tab==='funded'?'on':''}" data-a="gtab" data-m="funded">Профинансированные проекты</button></div><div class="sb"><input id="gk" type="search" placeholder="Ключевые слова (необязательно)" value="${esc(G.kw)}"><button data-a="gsearch">→</button></div><div id="gres">${grHtml()}</div>`,
+proj(){if(curP){const p=PR.find(x=>x.id===curP);if(!p){curP=null;return V.proj()}const l=p.tasks.filter(x=>pf==='all'||x.s===pf);
+ return `<div class="row" style="padding:12px 16px"><button class="x" data-a="pback" style="font-size:24px;color:var(--tx)">←</button><h2 style="margin:0 0 0 12px;font-size:20px">${esc(p.name)}</h2></div><div style="padding:0 16px"><input id="tt" placeholder="Новая задача" enterkeyhint="done"><input id="td" type="date" style="margin-top:8px"></div><div class="seg">${[['all','Все'],['todo','К работе'],['doing','В процессе'],['done','Готово']].map(x=>`<button class="${pf===x[0]?'on':''}" data-a="pf" data-m="${x[0]}">${x[1]}</button>`).join('')}</div>${l.length?l.map(x=>`<div class="task ${x.s==='done'?'d':''}" data-tid="${x.id}"><div><div class="tt">${esc(x.t)}</div>${x.due?`<div class="h">📅 ${x.due}</div>`:''}</div><button class="st" data-a="tmv">${SL[x.s]}</button><button class="x" data-a="trm">×</button></div>`).join(''):'<div class="empty">Задач нет. Добавьте первую выше.</div>'}`}
+ return `<div class="row" style="padding:12px 16px"><button class="x" data-a="go" data-v="home" style="font-size:24px;color:var(--tx)">←</button><h2 style="margin:0 0 0 12px;font-size:22px">Мои проекты</h2></div>${PR.map(p=>{const d=p.tasks.filter(x=>x.s==='done').length;return `<div class="item" data-a="openp" data-id="${p.id}"><div class="ic">📋</div><div><b>${esc(p.name)}</b><div class="h">${esc(p.type)} · ${d} из ${p.tasks.length} выполнено</div></div><button class="x" data-a="rmp" data-id="${p.id}">🗑</button></div>`}).join('')||'<div class="empty">Создайте доску для статьи, гранта или диссертации.</div>'}<div style="padding:8px 16px"><button data-a="newp" style="width:100%">+ Новый проект</button></div>`},
+notes(){if(curN){const n=curN;return `<div class="row" style="padding:12px 16px"><button class="x" data-a="nback" style="font-size:24px;color:var(--tx)">←</button><h2 style="margin:0 0 0 12px">Заметка</h2></div><div style="padding:0 16px"><input id="nt" placeholder="Название" value="${esc(n.t)}"><div class="chips" style="padding:8px 0">${['$x^2$','$\\frac{a}{b}$','$\\sum_{i=1}^{n}$','$\\int_a^b$','$\\sqrt{x}$','$$E=mc^2$$'].map(s=>`<button class="chip" data-a="ins" data-s="${esc(s)}">${esc(s.replace(/\$/g,''))}</button>`).join('')}</div><textarea id="nb" placeholder="Текст. Формулы: $a^2+b^2=c^2$ или $$\\int_0^1 x\\,dx$$">${esc(n.b)}</textarea><h2>Предпросмотр</h2><div class="pv" id="pv"></div>${n.id?'<button class="gh" data-a="ndel" style="margin-top:14px;width:100%">Удалить заметку</button>':''}</div>`}
+ return `<div class="row" style="padding:12px 16px"><button class="x" data-a="go" data-v="home" style="font-size:24px;color:var(--tx)">←</button><h2 style="margin:0 0 0 12px;font-size:22px">Заметки и формулы</h2></div>${NT.map(n=>`<div class="item" data-a="opn" data-id="${n.id}"><div class="ic">∑</div><div><b>${esc(n.t||'Без названия')}</b><div class="h" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${esc(n.b)}</div></div></div>`).join('')||'<div class="empty">Заметок пока нет.</div>'}<div style="padding:8px 16px"><button data-a="newn" style="width:100%">+ Новая заметка</button></div>`},
+prof(){const fl=['name','email','aff','orcid','interests','country'],pc=Math.round(fl.filter(k=>S[k]).length/fl.length*100);
+ return `<div class="av big">${esc((S.name||'?')[0])}</div><h1 style="text-align:center;font-size:24px">${esc(S.name||'Без имени')}</h1><p class="h" style="text-align:center;font-size:15px">${esc(S.email||'')}</p>
+<div class="item" data-a="pedit" style="margin-top:20px"><div class="ic">🪪</div><div><b>Мой профиль учёного</b><div style="height:6px;background:var(--ct);border-radius:3px;margin:6px 0"><div style="height:100%;width:${pc}%;background:var(--pr);border-radius:3px"></div></div><span class="h">Заполнено: ${pc}%</span></div>›</div>
+<div style="padding:4px 16px"><b>Язык</b><div class="row" style="margin-top:8px">${[['uz','Oʻzbekcha'],['ru','Русский'],['en','English']].map(x=>`<button class="chip ${S.lang===x[0]?'on':''}" data-a="lang" data-l="${x[0]}">${x[1]}</button>`).join('')}</div></div>
+<div class="item" data-a="zset"><div style="flex:1"><b>Zotero</b><div class="h">${S.zKey?'Подключён':'Не подключён'}</div></div>›</div>
+<div class="item" data-a="okey"><div><b>Ключ OpenAlex (необязательно)</b><div class="h">${S.oaKey?'Задан':'Не задан'}</div></div>›</div>
+<div class="item" data-a="prx"><div><b>CORS-прокси для грантов (необязательно)</b><div class="h">${S.proxy?'Задан':'Не задан'}</div></div>›</div>
+<div class="item" data-a="otok"><div><b>Токен OpenRouter (необязательно)</b><div class="h">${S.orTok?'Задан':'Не задан'}</div></div>›</div>
+<div class="item"><div><b>Замок приложения</b><div class="h">PIN-код при открытии</div></div><input type="checkbox" class="sw" id="lk" ${S.lock?'checked':''}></div>
+<div style="padding:8px 16px"><button class="gh" data-a="wipe" style="width:100%">Удалить все мои данные</button><p class="h" style="margin-top:10px">Данные хранятся только на этом устройстве (ЗРУ-547).</p></div>`}};
+
+/* ---- fragments ---- */
+function resHtml(){if(!Q.items.length)return Q.busy?'<div class="spin">Загрузка…</div>':Q.err?'<div class="empty">Не удалось загрузить данные. Проверьте ключ OpenAlex в профиле и соединение.</div>':Q.page>1||Q.q?'<div class="empty">Ничего не найдено.</div>':`<div class="empty"><div class="ic">🔎</div>Ищите среди сотен миллионов научных работ открытой базы OpenAlex<div style="text-align:left;margin-top:22px"><b style="color:var(--tx)">Попробуйте</b><div class="row" style="flex-wrap:wrap;margin-top:10px">${['machine learning','CRISPR','graphene','climate change','quantum computing','Alzheimer'].map(s=>`<button class="chip" data-a="sug" data-s="${s}">${s}</button>`).join('')}</div></div></div>`;
+ return `<div class="p h" style="padding-bottom:0">Найдено: ${fmt(Q.total)}</div>`+Q.items.map(w=>wcard(w)).join('')+(Q.busy?'<div class="spin">Загрузка…</div>':Q.items.length<Q.total&&Q.page<20?'<div style="padding:8px 16px"><button class="gh" data-a="more" style="width:100%">Показать ещё</button></div>':'')+(Q.err?'<div class="empty">Ошибка сети.</div>':'')}
+function netHtml(){if(N.busy)return'<div class="spin">Загрузка…</div>';if(!N.res)return'';if(!N.res.length)return'<div class="empty">Никого не найдено.</div>';
+ return `<div class="p" style="padding-bottom:0"><b>Найдено: ${N.res.length}</b></div>`+N.res.map(a=>`<div class="card row"><div class="av">${esc(a.n.split(' ').map(s=>s[0]).slice(0,2).join(''))}</div><div style="flex:1"><div class="t">${esc(a.n)}</div>${a.i?`<div class="m">${esc(a.i)}</div>`:''}<span class="tag">Работ: ${fmt(a.c)}</span>${a.q!=null?`<span class="tag">Цитирований: ${fmt(a.q)}</span>`:''}<button class="ln" data-a="op" data-u="${esc(a.id)}">Профиль</button></div></div>`).join('')}
+function grHtml(){if(G.busy)return'<div class="spin">Загрузка…</div>';if(!G.items)return'<div class="spin">Загрузка…</div>';
+ if(G.tab==='funded')return G.items.map(f=>`<div class="card"><span class="tag">${esc(f.cc||'')}</span><div class="t" style="margin-top:6px">${esc(f.n)}</div><div class="m">Работ: ${fmt(f.w)}</div><button class="ln" data-a="op" data-u="${esc(f.u)}">Открыть</button></div>`).join('')||'<div class="empty">Ничего не найдено.</div>';
+ const l=G.items.filter(x=>x.s==='eu'?G.eu:G.gg);
+ return `<div class="chips"><button class="chip ${G.eu?'on':''}" data-a="gsrc" data-s="eu">${G.eu?'✓ ':''}EU · ${G.cnt.eu}</button><button class="chip ${G.gg?'on':''}" data-a="gsrc" data-s="gg">${G.gg?'✓ ':''}Grants.gov · ${G.cnt.gg}</button></div>${G.er.gg||G.er.eu?`<div class="warn">Не удалось загрузить: ${[G.er.gg?'Grants.gov':'',G.er.eu?'EU':''].filter(Boolean).join(', ')}. Проверьте интернет и повторите.</div>`:''}<div class="warn">🛡 Перед подачей проверьте условия участия (eligibility) на сайте конкурса.</div><div class="p h" style="padding-bottom:0">Найдено: ${l.length}</div>`+l.slice(0,G.n).map(x=>{const d=x.d?Math.ceil((new Date(x.d)-Date.now())/864e5):null;return `<div class="card"><div class="row sp"><span class="tag">${x.s==='eu'?'EU':'Grants.gov'}</span>${d!=null&&d>=0?`<span class="tag ${d<=7?'r':''}">⏱ Осталось ${d} ${pl(d)}</span>`:''}</div><div class="t" style="margin-top:8px">${esc(x.t)}</div>${x.a?`<div class="m">${esc(x.a)}</div>`:''}<div class="row sp"><span class="m">${x.d?'📅 Дедлайн: '+x.d.split('-').reverse().join('.'):''}</span><button class="ln" data-a="op" data-u="${esc(x.u)}">Открыть</button></div></div>`}).join('')+(l.length>G.n?'<div style="padding:8px 16px"><button class="gh" data-a="gmore" style="width:100%">Показать ещё</button></div>':'')}
+
+/* ---- navigation ---- */
+const NAV=[['home','🏠'],['search','🔍'],['lib','📚'],['net','🕸'],['prof','👤']];
+function show(v){cur=v;if(v!=='proj')curP=curP&&v==='proj'?curP:null;if(v!=='notes')curN=null;
+ const nv={grants:'home',proj:'home',notes:'home'}[v]||v;
+ $('#nav').innerHTML=NAV.map(n=>`<button class="${n[0]===nv?'on':''}" data-a="go" data-v="${n[0]}"><i>${n[1]}</i>${t(n[0])}</button>`).join('');
+ $('#nav').classList.toggle('hidden',v==='consent');
+ $('#main').innerHTML=V[v]();$('#main').scrollTop=0;hooks();if(v==='grants'&&!G.items&&!G.busy)gSearch();
+ if(inTG){const b=tg.BackButton;['grants','proj','notes'].includes(v)?b.show():b.hide()}}
+function hooks(){
+ const M={consent:['Принять и продолжить',accept],search:['Найти',()=>doSearch(1)],net:['Найти',netGo],grants:['Найти',gSearch]};let m=M[cur];
+ if(cur==='consent'){const ok=$('#ag').checked;m=ok?M.consent:null}
+ if(cur==='proj'&&curP)m=['Добавить задачу',addTask];if(cur==='notes'&&curN)m=['Сохранить заметку',saveNote];
+ setMain(m&&m[0],m&&m[1]);
+ if(cur==='notes'&&curN){loadK().then(pv);}
+}
+let kp=null;const loadK=()=>kp||(kp=new Promise(r=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css';document.head.appendChild(l);const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js';s.onload=s.onerror=()=>r();document.head.appendChild(s)}));
+function math(s){let o='',i=0,m;const re=/\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/g;while((m=re.exec(s))){o+=esc(s.slice(i,m.index)).replace(/\n/g,'<br>');try{o+=window.katex?katex.renderToString(m[1]||m[2],{displayMode:!!m[1],throwOnError:false}):esc(m[0])}catch(e){o+=esc(m[0])}i=re.lastIndex}return o+esc(s.slice(i)).replace(/\n/g,'<br>')}
+const pv=()=>{const b=$('#nb');if(b)$('#pv').innerHTML=math(b.value)};
+
+/* ---- actions ---- */
+function accept(){if(!$('#ag').checked)return;S.oaKey=$('#ok').value.trim()||S.oaKey||'';S.consent=1;save();hap();show('home')}
+async function doSearch(reset){if(Q.busy)return;const i=$('#q');if(reset){const q=i?i.value.trim():Q.q;if(!q)return;Q.q=q;Q.page=1;Q.items=[];Q.total=0}else Q.page++;
+ Q.busy=1;Q.err=0;$('#res').innerHTML=resHtml();
+ try{const d=await api('works?search='+enc(Q.q)+(Q.oa?'&filter=is_oa:true':'')+'&sort='+Q.sort+'&per-page=10&page='+Q.page+'&select=id,display_name,publication_year,cited_by_count,authorships,primary_location,abstract_inverted_index,doi,open_access');Q.items=Q.items.concat(d.results.map(wk));Q.total=d.meta.count}catch(e){Q.err=1;if(!reset)Q.page--;keyErr(e)}
+ Q.busy=0;if(cur==='search')$('#res').innerHTML=resHtml()}
+async function netGo(){if(N.busy)return;let p;
+ if(N.mode==='name'){N.name=$('#nm').value.trim();if(!N.name)return;p='authors?search='+enc(N.name)+'&per-page=30&select=id,display_name,works_count,cited_by_count,last_known_institutions'}
+ else if(N.mode==='topic'){N.kw=$('#kw').value.trim();N.cc=$('#cc').value;N.act=$('#act').checked;const f=[];if(N.sf)f.push('primary_topic.subfield.id:'+N.sf.id);if(N.cc)f.push('authorships.countries:'+N.cc);if(N.act)f.push('from_publication_date:'+(new Date().getFullYear()-5)+'-01-01');if(!N.sf&&!N.kw){alertM('Выберите тему или введите ключевые слова');return}
+  p='works?'+(f.length?'filter='+f.join(',')+'&':'')+(N.kw?'search='+enc(N.kw)+'&':'')+'group_by=authorships.author.id&per-page=30'}else return;
+ N.busy=1;N.res=null;$('#nres').innerHTML=netHtml();
+ try{const d=await api(p);N.res=N.mode==='name'?d.results.map(a=>({id:a.id,n:a.display_name,c:a.works_count,q:a.cited_by_count,i:((a.last_known_institutions||[])[0]||{}).display_name})):d.group_by.filter(g=>g.key!=='unknown'&&g.key_display_name).map(g=>({id:g.key,n:g.key_display_name,c:g.count}));hap()}catch(e){N.res=[];if(!keyErr(e))alertM('Не удалось загрузить данные')}
+ N.busy=0;if(cur==='net')$('#nres').innerHTML=netHtml()}
+async function gSearch(){const k=$('#gk');if(k)G.kw=k.value.trim();G.busy=1;G.n=20;G.items=null;G.er={};$('#gres').innerHTML=grHtml();
+ try{if(G.tab==='funded'){const d=await api('funders?'+(G.kw?'search='+enc(G.kw)+'&':'sort=works_count:desc&')+'per-page=20&select=id,display_name,country_code,works_count');G.items=d.results.map(f=>({n:f.display_name,cc:f.country_code,w:f.works_count,u:f.id}))}
+ else{const all=[];
+  const gg=gfetch('https://api.grants.gov/v1/api/search2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({keyword:G.kw,oppStatuses:'forecasted|posted',rows:50,startRecordNum:0})}).then(r=>r.json()).then(r=>{const h=(r.data&&r.data.oppHits)||[];G.cnt.gg=(r.data&&r.data.hitCount)||h.length;h.forEach(o=>{const c=(o.closeDate||'').split('/');all.push({s:'gg',t:o.title,a:o.agency||o.agencyCode,d:c.length===3?c[2]+'-'+c[0]+'-'+c[1]:'',u:'https://www.grants.gov/search-results-detail/'+o.id})})}).catch(()=>{G.cnt.gg=0;G.er.gg=1});
+  const fd=new FormData();fd.append('query',new Blob([JSON.stringify({bool:{must:[{terms:{type:['1','2','8']}},{terms:{status:['31094501','31094502']}}]}})],{type:'application/json'}));fd.append('languages',new Blob(['["en"]'],{type:'application/json'}));
+  const eu=gfetch('https://api.tech.ec.europa.eu/search-api/prod/rest/search?apiKey=SEDIA&pageSize=50&pageNumber=1&text='+enc(G.kw||'***'),{method:'POST',body:fd}).then(r=>r.json()).then(r=>{G.cnt.eu=r.totalResults||0;(r.results||[]).forEach(o=>{const m=o.metadata||{},id=(m.identifier||[''])[0],d=(m.deadlineDate||[''])[0];all.push({s:'eu',t:(m.title||[o.summary||id])[0],a:(m.callTitle||[''])[0]||'European Commission',d:d?d.slice(0,10):'',u:'https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/'+id})})}).catch(()=>{G.cnt.eu=0;G.er.eu=1});
+  await Promise.all([gg,eu]);all.sort((a,b)=>(a.d||'9')<(b.d||'9')?-1:1);G.items=all.filter(x=>!x.d||new Date(x.d)>=new Date(ymd(new Date())))}}
+ catch(e){G.items=[];if(!keyErr(e))alertM('Не удалось загрузить данные')}
+ G.busy=0;if(cur==='grants')$('#gres').innerHTML=grHtml()}
+function addTask(){const p=PR.find(x=>x.id===curP),i=$('#tt');if(!p||!i||!i.value.trim()){i&&i.focus();return}p.tasks.unshift({id:uid(),t:i.value.trim().slice(0,300),s:'todo',due:$('#td').value||''});save();hap();show('proj')}
+function saveNote(){const n=curN;n.t=$('#nt').value.trim();n.b=$('#nb').value;if(!n.t&&!n.b)return;if(!n.id){n.id=uid();NT.unshift(n)}save();hap();curN=null;show('notes')}
+async function zImport(){if(!S.zUser||!S.zKey){zSet();return}
+ $('#main').insertAdjacentHTML('afterbegin','<div class="spin" id="zs">Импорт из Zotero…</div>');
+ try{const r=await fetch('https://api.zotero.org/users/'+enc(S.zUser)+'/items/top?format=json&limit=100',{headers:{'Zotero-API-Key':S.zKey,'Zotero-API-Version':'3'}});if(!r.ok)throw 0;const d=await r.json();let n=0;
+  d.forEach(o=>{const x=o.data||{};if(!x.title||['attachment','note'].includes(x.itemType))return;const id='z:'+o.key;if(LIB.some(w=>w.id===id))return;
+   LIB.unshift({id,title:x.title,au:(x.creators||[]).slice(0,4).map(c=>c.name||((c.firstName||'')+' '+(c.lastName||'')).trim()).join(', '),year:+((x.date||'').match(/\d{4}/)||[0])[0]||'',src:x.publicationTitle||'',url:x.DOI?'https://doi.org/'+x.DOI:(x.url||'https://www.zotero.org/'),ab:x.abstractNote||'',cites:null,oa:false});n++});
+  save();hap();alertM('Импортировано: '+n)}catch(e){alertM('Не удалось импортировать. Проверьте User ID и ключ с правом чтения.')}
+ show('lib')}
+function zSet(){modal('Zotero',[{id:'u',l:'User ID (zotero.org/settings/keys)',v:S.zUser},{id:'k',l:'API-ключ',v:S.zKey,t:'password'}],o=>{S.zUser=o.u;S.zKey=o.k;save();o.u&&o.k&&cur==='lib'?zImport():show(cur)})}
+async function gfetch(u,o){try{return await fetch(u,o)}catch(e){if(!S.proxy)throw e;return fetch(S.proxy+enc(u),o)}}
+const hp=p=>{let h=0;for(const c of p+'scinode')h=(h*31+c.charCodeAt(0))|0;return h};
+function lockUI(){const d=document.createElement('div');d.id='lock';d.innerHTML='<h1>Scinode</h1><p class="h">Введите PIN-код</p><input id="pin" type="password" inputmode="numeric" maxlength="4" style="text-align:center;font-size:28px">';document.body.appendChild(d);$('#pin').oninput=e=>{if(e.target.value.length===4){if(hp(e.target.value)===S.lock){d.remove()}else{e.target.value='';hap('error')}}};$('#pin').focus()}
+
+const A={
+key2:()=>askKey(),go:b=>{if(b.dataset.v==='proj')curP=null;show(b.dataset.v)},
+accept,dosearch:()=>doSearch(1),more:()=>doSearch(0),
+oa:()=>{Q.oa=!Q.oa;Q.q&&Q.items.length?(Q.q=$('#q').value.trim()||Q.q,show('search'),doSearch(1)):show('search')},
+sort:b=>{Q.sort=b.dataset.s;Q.q?(show('search'),doSearch(1)):show('search')},
+sug:b=>{show('search');$('#q').value=b.dataset.s;doSearch(1)},
+ex:b=>{const a=b.closest('.card').querySelector('.ab'),o=a.classList.toggle('o');b.textContent=o?'Свернуть':'Развернуть'},
+op:b=>openU(b.dataset.u),
+save:b=>{const id=b.closest('.card').dataset.id,w=Q.items.find(x=>x.id===id);if(w&&!LIB.some(x=>x.id===id)){LIB.unshift(w);save();hap();b.textContent='В библиотеке ✓'}},
+unsave:b=>{const id=b.closest('.card').dataset.id;LIB=LIB.filter(x=>x.id!==id);save();show('lib')},
+zot:()=>zImport(),zset:zSet,
+nmode:b=>{N.mode=b.dataset.m;N.res=null;show('net')},clrsf:()=>{N.sf=null;show('net')},netgo:netGo,
+gtab:b=>{G.tab=b.dataset.m;G.items=null;show('grants')},gsearch:gSearch,gsrc:b=>{G[b.dataset.s]=!G[b.dataset.s];$('#gres').innerHTML=grHtml()},gmore:()=>{G.n+=20;$('#gres').innerHTML=grHtml()},
+goal:()=>modal('Цель недели (задач)',[{id:'g',l:'Количество',v:S.goal||5,t:'number'}],o=>{S.goal=Math.max(1,+o.g||5);save();show('home')}),
+pback:()=>{curP=null;show('proj')},openp:b=>{if(b.dataset.id){curP=b.dataset.id;pf='all';show('proj')}},
+rmp:(b,e)=>{e.stopPropagation();PR=PR.filter(p=>p.id!==b.dataset.id);save();show('proj')},
+newp:()=>modal('Новый проект',[{id:'n',l:'Название'},{id:'y',l:'Тип (Статья / Грант / Диссертация)',v:'Статья'}],o=>{if(!o.n)return;PR.push({id:uid(),name:o.n,type:o.y||'Проект',tasks:[]});save();show('proj')}),
+pf:b=>{pf=b.dataset.m;show('proj')},
+tmv:b=>{const p=PR.find(x=>x.id===curP),k=p.tasks.find(x=>x.id===b.closest('.task').dataset.tid);k.s=NX[k.s];k.doneAt=k.s==='done'?Date.now():0;if(k.s==='done')hap();save();show('proj')},
+trm:b=>{const p=PR.find(x=>x.id===curP);p.tasks=p.tasks.filter(x=>x.id!==b.closest('.task').dataset.tid);save();show('proj')},
+newn:()=>{curN={id:'',t:'',b:''};show('notes')},opn:b=>{curN=Object.assign({},NT.find(x=>x.id===b.dataset.id));show('notes')},nback:()=>{curN=null;show('notes')},
+ndel:()=>{NT=NT.filter(x=>x.id!==curN.id);save();curN=null;show('notes')},
+ins:b=>{const t=$('#nb'),s=b.dataset.s,p=t.selectionStart;t.value=t.value.slice(0,p)+s+t.value.slice(t.selectionEnd);t.focus();pv()},
+lang:b=>{S.lang=b.dataset.l;save();show('prof')},
+pedit:()=>modal('Профиль учёного',[{id:'name',l:'Имя',v:S.name},{id:'email',l:'Email',v:S.email,t:'email'},{id:'aff',l:'Организация',v:S.aff},{id:'orcid',l:'ORCID',v:S.orcid},{id:'interests',l:'Научные интересы',v:S.interests},{id:'country',l:'Страна',v:S.country}],o=>{Object.assign(S,o);save();show('prof')}),
+okey:()=>modal('Ключ OpenAlex',[{id:'k',l:'API-ключ',v:S.oaKey,t:'password'},{id:'m',l:'Email для OpenAlex (polite pool)',v:S.mail}],o=>{S.oaKey=o.k;S.mail=o.m;save();show('prof')}),
+prx:()=>modal('CORS-прокси',[{id:'p',l:'Адрес вида https://имя.workers.dev/?u=',v:S.proxy}],o=>{S.proxy=o.p;save();show('prof')}),
+otok:()=>modal('Токен OpenRouter',[{id:'k',l:'Токен',v:S.orTok,t:'password'}],o=>{S.orTok=o.k;save();show('prof')}),
+wipe:()=>{const go=()=>{localStorage.clear();location.reload()};inTG&&tg.showConfirm?tg.showConfirm('Удалить все данные приложения на этом устройстве?',ok=>ok&&go()):confirm('Удалить все данные?')&&go()}};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b,e)});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const i=e.target.id;if(i==='q')doSearch(1);else if(i==='nm')netGo();else if(i==='gk')gSearch();else if(i==='tt')addTask()});
+document.addEventListener('change',e=>{const i=e.target.id;
+ if(i==='ag')hooks()||($('#cb').classList.toggle('hidden',!e.target.checked));
+ else if(i==='sf'&&SF[e.target.value]){N.sf={id:SF[e.target.value],name:e.target.value};show('net')}
+ else if(i==='lk'){if(e.target.checked)modal('PIN-код (4 цифры)',[{id:'p',l:'Новый PIN',t:'password'}],o=>{if(/^\d{4}$/.test(o.p)){S.lock=hp(o.p);save()}else alertM('Нужно ровно 4 цифры');show('prof')});else{S.lock=0;save()}}});
+let sft;document.addEventListener('input',e=>{const i=e.target.id;
+ if(i==='nb')pv();
+ else if(i==='sf'){clearTimeout(sft);const v=e.target.value.trim();if(v.length<3)return;sft=setTimeout(async()=>{try{const d=await api('subfields?search='+enc(v)+'&per-page=8&select=id,display_name');d.results.forEach(s=>SF[s.display_name]=s.id.split('/').pop());const l=$('#sfl');if(l)l.innerHTML=Object.keys(SF).map(k=>`<option value="${esc(k)}">`).join('')}catch(x){}},300)}});
+
+if(!inTG&&!S.consent){}
+if(S.lock)lockUI();
+show(S.consent?'home':'consent');
+})();
+</script></body></html>
